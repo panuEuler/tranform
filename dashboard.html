@@ -54,7 +54,7 @@
     <div id="dashboard">
         <div class="container">
             <div class="box-filter d-flex justify-content-end mb-3">
-                <select class="custom-select w-25" id="dateFiller" onchange="handleDateFilter()">
+                <select style="width: 200px;" class="custom-select" id="dateFiller" onchange="handleDateFilter()">
                     <option value="month">เดือนนี้</option>
                     <option value="week">สัปดาห์นี้</option>
                     <option value="day">วันนี้</option>
@@ -70,10 +70,10 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">ชื่อ</th>
-                            <th scope="col" class="text-center">ชั้นมัธยมศึกษาปีที่</th>
-                            <th scope="col" class="text-center">จำนวนครั้งเข้าใช้งาน/ครั้ง</th>
+                            <th>#</th>
+                            <th style="min-width: 150px;">ชื่อ</th>
+                            <th style="min-width: 150px;" class="text-center">ชั้น</th>
+                            <th style="min-width: 150px;" class="text-center">จำนวนครั้งเข้าใช้งาน/ครั้ง</th>
                         </tr>
                     </thead>
                     <tbody id="mytable">
