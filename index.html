@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- bootstap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="fonts/kanit/style.css">
+    <link rel="stylesheet" href="css/main_styles.css">
+
+    <title>Document</title>
+</head>
+
+<body id="index">
+    <div class="container">
+        <div class="box-login">
+            <div class="box-title">
+                <div class="box-logo mb-2">
+                    <img src="images/logo.jpg" alt="logo" />
+                </div>
+                <div class="box-title text-center">
+                    <label class="title-head mb-4">ระบบเช็คนักเรียนเข้าใช้งานห้องสมุด</label>
+                    <label class="text-name-school mb-2">โรงเรียนหนองม่วงไข่พิทยาคม เมืองแพร่</label>
+                </div>
+            </div>
+            <form method="post" id="login">
+                <div class="box-input">
+                    <div class="username mt-3">
+                        <Label class="title-username">Username</Label>
+                        <input type="text" class="form-control" placeholder="Username" id="username" required />
+                    </div>
+                    <div class="password mt-3">
+                        <Label class="title-password">Password</Label>
+                        <input type="password" class="form-control" placeholder="Password" id="password" required />
+                    </div>
+                </div>
+                <div class="box-btn mt-5 d-flex justify-content-center">
+                    <button type="submit">เข้าสู่ระบบ</button>
+                </div>
+            </form>
+        </div>
+        <div id='loading' class="d-none">
+            <div class="spinner-grow text-danger mr-3" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow text-warning " role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow text-info" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        let d = document
+        const form = d.querySelector("#login");
+        localStorage.removeItem('access_token')
+        form.addEventListener("submit", async function (event) {
+            // stop form submission
+            event.preventDefault();
+            var loading = document.getElementById("loading");
+            loading.classList.remove("d-none");
+
+            let data = {
+                username: d.getElementById('username').value,
+                password: d.getElementById('password').value,
+            }
+            let response = await axios({
+                method: 'post',
+                url: `http://localhost:7000/api_authen/on_login`,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                },
+                data: JSON.stringify(data)
+            })
+            if (response.data.status == '0') {
+                loading.classList.add("d-none")
+                alert('ไม่พบผู้ใช้')
+            } else if (response.data.status == '1') {
+                loading.classList.add("d-none");
+                localStorage.setItem('access_token', response.data.access_token)
+                // location.href = location.origin + '/dashboard.html'
+                location.href = 'file:///D:/checkuselibraryfront/dashboard.html'
+            }
+        });
+
+        
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

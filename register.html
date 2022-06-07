@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- bootstap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="fonts/kanit/style.css">
+    <link rel="stylesheet" href="css/main_styles.css">
+
+    <title>Document</title>
+</head>
+
+<body id="regiter">
+    <div class="container">
+        <div class="box-login">
+            <div class="box-logo mb-2 mt-3">
+                <img src="images/logo.jpg" alt="logo" />
+            </div>
+            <div class="box-title text-center">
+                <label class="title-head mb-4">ระบบเช็คนักเรียนเข้าใช้งานห้องสมุด</label>
+                <label class="text-name-school mb-2">โรงเรียนหนองม่วงไข่พิทยาคม เมืองแพร่</label>
+            </div>
+            <form method="post" id="register">
+                <div class="box-input">
+                    <div class="no mt-3">
+                        <Label class="no">เลขประจำตัวนักเรียน</Label>
+                        <input type="text" class="form-control" placeholder="เลขประจำตัวนักเรียน" id="no" required />
+                    </div>
+                    <div class="title mt-3">
+                        <Label class="title">คำนำหน้า</Label>
+                        <select class="custom-select" id="title" required>
+                            <option value="นาย">นาย</option>
+                            <option value="นาง">นาง</option>
+                            <option value="นางสาว">นางสาว</option>
+                            <option value="เด็กชาย">เด็กชาย</option>
+                            <option value="เด็กหญิง">เด็กหญิง</option>
+                        </select>
+                    </div>
+                    <div class="name mt-3">
+                        <Label class="name">ชื่อ - นามสกุล</Label>
+                        <input type="text" class="form-control" placeholder="ชื่อ - นามสกุล" id="name" required />
+                    </div>
+                    <div class="class mt-3">
+                        <Label class="class">ชั้นเรียน</Label>
+                        <select class="custom-select" id="class" required>
+                            <option value="ชั้นมัธยมศึกษาปีที่ 1">ชั้นมัธยมศึกษาปีที่ 1</option>
+                            <option value="ชั้นมัธยมศึกษาปีที่ 2">ชั้นมัธยมศึกษาปีที่ 2</option>
+                            <option value="ชั้นมัธยมศึกษาปีที่ 3">ชั้นมัธยมศึกษาปีที่ 3</option>
+                            <option value="ชั้นมัธยมศึกษาปีที่ 4">ชั้นมัธยมศึกษาปีที่ 4</option>
+                            <option value="ชั้นมัธยมศึกษาปีที่ 5">ชั้นมัธยมศึกษาปีที่ 5</option>
+                            <option value="ชั้นมัธยมศึกษาปีที่ 6">ชั้นมัธยมศึกษาปีที่ 6</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="box-btn mt-5 d-flex justify-content-center">
+                    <button type="submit">เข้าสู่ระบบ</button>
+                </div>
+            </form>
+        </div>
+        <div id='loading' class="d-none">
+            <div class="spinner-grow text-danger mr-3" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow text-warning  mr-3" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow text-info" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        let d = document
+        const form = d.querySelector("#register");
+        form.addEventListener("submit", async function (event) {
+            // stop form submission
+            event.preventDefault();
+            let loading = document.getElementById("loading");
+
+            let data = {
+                no: d.getElementById('no').value,
+                title: d.getElementById('title').value,
+                name: d.getElementById('name').value,
+                class: d.getElementById('class').value,
+            }
+
+            let response = await axios({
+                method: 'post',
+                url: `http://localhost:7000/api_authen/onregister`,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                },
+                data: JSON.stringify(data)
+            })
+            if (response.data.success) {
+                Swal.fire('ลงทะเบียนสำเร็จแล้ว', '', 'success')
+                d.getElementById("register").reset()
+            } else {
+                Swal.fire({
+                    title: 'ลงทะเบียนไม่สำเร็จ',
+                    text: "กรุณาลงใหม่อีกครั้ง!",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                })
+            }
+            loading.classList.add("d-none");
+        });
+
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+
+    <!-- swal -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
+
+</body>
+
+</html>

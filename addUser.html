@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- bootstap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="fonts/kanit/style.css">
+    <link rel="stylesheet" href="css/main_styles.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <!-- menu -->
+    <link rel="stylesheet" type="text/css" href="css/bsnav.min.css">
+
+
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- menu -->
+    <div class="box-menu">
+        <div class="navbar navbar-expand-lg bsnav position-fixed bsnav-light">
+            <div class="container  pt-2 pb-2">
+                <img id="logoMenu" class="logo" src="images/logo.jpg" />
+
+                <button class="navbar-toggler toggler-spring"><span class="navbar-toggler-icon"></span></button>
+
+                <div id="menuLogin" class="collapse navbar-collapse justify-content-end mt-2">
+                    <ul class="navbar-nav navbar-mobile mr-0 pl-5 pl-lg-0">
+                        <li class="nav-item"><a class="nav-link font-weight-normal m-2"
+                                href="dashboard.html">หน้าแรก</a></li>
+                        <li class="nav-item"><a class="nav-link font-weight-normal m-2"
+                                href="downloadQrCode.html">ดาวโหลด Qr code</a></li>
+                        <li class="nav-item"><a class="nav-link font-weight-normal m-2"
+                                href="addUser.html">ผู้ใช้งานระบบ</a></li>
+                        <li class="nav-item"><a class="nav-link font-weight-normal m-2"
+                                href="register.html">ลงทะเบียน</a></li>
+                        <li class="nav-item"><a class="nav-link font-weight-normal m-2" href="index.html">ออกจากระบบ</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="bsnav-mobile">
+            <div class="bsnav-mobile-overlay"></div>
+            <div id="navbarDark" class="navbar bsnav-dark"></div>
+        </div>
+    </div>
+    <!-- menu -->
+
+    <div id="add-user">
+        <div class="container">
+            <div class="d-flex bd-highlight mb-3 justify-content-end align-items-center">
+                <div class="p-2 bd-highlight">
+                    <button type="button" class="btn btn-add-user" onclick="showUserCreateBox()">เพิ่มผู้ใช้งาน</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">ActiveDate</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mytable">
+                        <tr>
+                            <th scope="row" colspan="5">Loading...</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        let userList = []
+        async function loadTable() {
+            let res = await axios({
+                method: 'get',
+                url: 'http://localhost:7000/api_authen/profile',
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    'Authorization': 'Bearer ' + localStorage.getItem("access_token")
+                }
+            });
+
+            userList = res.data.result
+
+            if (res.data.success) {
+                var trHTML = '';
+                i = 1
+                for (let obj of res.data.result) {
+                    if (obj['id'] !== 1) {
+                        trHTML += '<tr>';
+                        trHTML += '<td>' + i + '</td>';
+                        trHTML += '<td>' + obj['name'] + '</td>';
+                        trHTML += '<td>' + obj['username'] + '</td>';
+                        trHTML += '<td>' + obj['activeDate'] + '</td>';
+                        trHTML += '<td><button type="button" class="btn btn-success" onclick="showUserEditBox(' + obj['id'] + ')">แก้ไข</button>';
+                        trHTML += '<button type="button" class="btn btn-danger ml-2" onclick="userDelete(' + obj['id'] + ')">ลบ</button></td>';
+                        trHTML += "</tr>";
+                        i++
+                    }
+                }
+                document.getElementById("mytable").innerHTML = trHTML;
+            }
+        }
+
+        loadTable();
+
+        // create
+        function showUserCreateBox() {
+            Swal.fire({
+                title: 'เพิ่มผู้ใช้งาน',
+                html:
+                    '<Label>Name</Label> <br/>' +
+                    '<input id="name" class="form-control" placeholder="Name"> <br/>' +
+                    '<Label>Username</Label> <br/>' +
+                    '<input id="username" class="form-control" placeholder="Username"> <br/>' +
+                    '<Label>Password</Label> <br/>' +
+                    '<input id="password" class="form-control" placeholder="Password"> <br/>',
+                focusConfirm: false,
+                showCancelButton: true,
+                cancelButtonText: `cancel`,
+                preConfirm: () => {
+                    userCreate();
+                }
+            })
+        }
+
+        async function userCreate() {
+            const name = document.getElementById("name").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            let data = {
+                name,
+                username,
+                password
+            }
+
+            if (name && username && password) {
+                let res = await axios({
+                    method: 'post',
+                    url: 'http://localhost:7000/api_authen/create_user',
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        'Authorization': 'Bearer ' + localStorage.getItem("access_token")
+                    },
+                    data: data
+                });
+                if (res.data.success) {
+                    if (res.data.message !== 'มีผู้ใช้งาน username นี้แล้ว') {
+                        Swal.fire('บันทึกสำเร็จ', '', 'success').then(e => location.reload())
+                    } else {
+                        Swal.fire('บันทึกไม่สำเร็จ', 'มีผู้ใช้งาน username นี้แล้ว', 'warning')
+                    }
+                }
+            } else {
+                Swal.fire('บันทึกไม่สำเร็จ', 'กรุณากรอกข้อมูลให้ครบถ้วน!', 'warning')
+            }
+        }
+
+        // update
+        function showUserEditBox(id) {
+
+            const userData = userList.find((e) => { return e.id === id })
+            Swal.fire({
+                title: 'แก้ผู้ใช้งาน',
+                html:
+                    '<input id="id" type="hidden" value=' + userData['id'] + '>' +
+                    '<Label>Name</Label> <br/>' +
+                    '<input id="name" class="form-control" placeholder="Name" value="' + userData['name'] + '"> <br/>' +
+                    '<Label>Username</Label> <br/>' +
+                    '<input id="username" class="form-control" placeholder="Username" value="' + userData['username'] + '"> <br/>' +
+                    '<Label>Password</Label> <br/>' +
+                    '<input id="password" class="form-control" placeholder="Password"> <br/>' +
+                    '<input id="activeDate" type="hidden" value=' + userData['activeDate'] + '>',
+
+                focusConfirm: false,
+                showCancelButton: true,
+                cancelButtonText: `cancel`,
+                preConfirm: () => {
+                    userEdit();
+                }
+            })
+        }
+
+        async function userEdit() {
+            const id = document.getElementById("id").value;
+            const name = document.getElementById("name").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const activeDate = document.getElementById("activeDate").value;
+
+            let data = {
+                id,
+                name,
+                username,
+                password,
+                activeDate
+            }
+
+            if (name && username && password) {
+                let res = await axios({
+                    method: 'post',
+                    url: 'http://localhost:7000/api_authen/update_user',
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        'Authorization': 'Bearer ' + localStorage.getItem("access_token")
+                    },
+                    data: data
+                });
+                if (res.data.success) {
+                    if (res.data.message !== 'มีผู้ใช้งาน username นี้แล้ว') {
+                        Swal.fire('บันทึกสำเร็จ', '', 'success').then(e => location.reload())
+                    } else {
+                        Swal.fire('บันทึกไม่สำเร็จ', 'มีผู้ใช้งาน username นี้แล้ว', 'warning')
+                    }
+                }
+            } else {
+                Swal.fire('บันทึกไม่สำเร็จ', 'กรุณากรอกข้อมูลให้ครบถ้วน!', 'warning')
+            }
+        }
+
+        // delete
+        function userDelete(id) {
+            const userData = userList.find((e) => { return e.id === id })
+
+            Swal.fire({
+                title: 'ต้องการลบผู้ใช้งานนี้ใช่ไหม',
+                text: "",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+                showCancelButton: true,
+                cancelButtonText: `cancel`,
+            }).then(async e => {
+                if(e.value){
+                    let res = await axios({
+                        method: 'post',
+                        url: 'http://localhost:7000/api_authen/chang_status_user',
+                        headers: {
+                            "Access-Control-Allow-Origin": "*",
+                            'Authorization': 'Bearer ' + localStorage.getItem("access_token")
+                        },
+                        data: userData
+                    });
+                    if (res.data.success) {
+                        Swal.fire('ลบบัญชีผู้ใช้งานสำเร็จแล้ว', '', 'success').then(e => location.reload())
+                    }
+                }
+            })
+        }
+    </script>
+    <script>
+        window.onload = async () => {
+            let response = await axios({
+                method: 'post',
+                url: 'http://localhost:7000/api_authen/check_authen',
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    'Authorization': 'Bearer ' + localStorage.getItem("access_token")
+                }
+            });
+            if (response.data != false) {
+            } else {
+                // location.href = location.origin + "/jwt_auth/login.php";
+                location.href = 'file:///D:/checkuselibraryfront/index.html';
+            }
+        };
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+    <!-- menu && jquery -->
+    <script src="js/bsnav.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+
+    <!-- swal -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
+</body>
+
+</html>
