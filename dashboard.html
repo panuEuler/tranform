@@ -63,6 +63,9 @@
             <div class="box-chart d-flex justify-content-center">
                 <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
             </div>
+
+            <div id="text-precent" class="d-flex justify-content-center"></div>
+
             <div class="box-table d-flex justify-content-center">
                 <label class="title-table mt-4 mb-3">ตารางเรียงลำดับรายชื่อนักเรียนที่เข้าใช้งานห้องสมุด</label>
             </div>
@@ -121,6 +124,7 @@
                     'Authorization': 'Bearer ' + localStorage.getItem("access_token")
                 }
             })
+            console.log(res);
             let yValues;
             if (res.data.success) {
                 yValues = await res.data.result.detailY
@@ -128,13 +132,14 @@
                 i = 1
                 for (let obj of res.data.result.bodyTable) {
                     trHTML += '<tr>';
-                    trHTML += '<td>' + i + '</td>';
-                    trHTML += '<td>' + obj['name'] + '</td>';
-                    trHTML += '<td class="text-center">' + obj['class'] + '</td>';
-                    trHTML += '<td class="text-center">' + obj['count'] + '</td>';
-                    trHTML += "</tr>";
-                    i++
-                }
+                        trHTML += '<td>' + i + '</td>';
+                        trHTML += '<td>' + obj['name'] + '</td>';
+                        trHTML += '<td class="text-center">' + obj['class'] + '</td>';
+                        trHTML += '<td class="text-center">' + obj['count'] + '</td>';
+                        trHTML += "</tr>";
+                        i++
+                    }
+                document.getElementById('text-precent').innerHTML = '<Label>คิดเป็นร้อยละ' + res.data.result.percent +'</Label>';
                 document.getElementById("mytable").innerHTML = trHTML;
             }
 
