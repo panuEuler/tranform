@@ -1,4 +1,4 @@
 
 var endpoint = function() {
-    return 'http://localhost:3000'
+    return 'http://34.87.52.91:3000'
 }
