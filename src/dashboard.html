@@ -106,7 +106,7 @@
         window.onload = async () => {
             let response = await axios({
                 method: 'post',
-                url: '${endpoint()}/api_authen/check_authen',
+                url: `${endpoint()}/api_authen/check_authen`,
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     'Authorization': 'Bearer ' + localStorage.getItem("access_token")

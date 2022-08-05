@@ -86,7 +86,7 @@
         async function loadTable() {
             let res = await axios({
                 method: 'get',
-                url: '${endpoint()}/api_authen/profile',
+                url: `${endpoint()}/api_authen/profile`,
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     'Authorization': 'Bearer ' + localStorage.getItem("access_token")
@@ -151,7 +151,7 @@
             if (name && username && password) {
                 let res = await axios({
                     method: 'post',
-                    url: '${endpoint()}/api_authen/create_user',
+                    url: `${endpoint()}/api_authen/create_user`,
                     headers: {
                         "Access-Control-Allow-Origin": "*",
                         'Authorization': 'Bearer ' + localStorage.getItem("access_token")
@@ -213,7 +213,7 @@
             if (name && username && password) {
                 let res = await axios({
                     method: 'post',
-                    url: '${endpoint()}/api_authen/update_user',
+                    url: `${endpoint()}/api_authen/update_user`,
                     headers: {
                         "Access-Control-Allow-Origin": "*",
                         'Authorization': 'Bearer ' + localStorage.getItem("access_token")
@@ -248,7 +248,7 @@
                 if(e.value){
                     let res = await axios({
                         method: 'post',
-                        url: '${endpoint()}/api_authen/chang_status_user',
+                        url: `${endpoint()}/api_authen/chang_status_user`,
                         headers: {
                             "Access-Control-Allow-Origin": "*",
                             'Authorization': 'Bearer ' + localStorage.getItem("access_token")
@@ -266,7 +266,7 @@
         window.onload = async () => {
             let response = await axios({
                 method: 'post',
-                url: '${endpoint()}/api_authen/check_authen',
+                url: `${endpoint()}/api_authen/check_authen`,
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     'Authorization': 'Bearer ' + localStorage.getItem("access_token")
