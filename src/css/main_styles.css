@@ -1,0 +1,233 @@
+body {
+  font-family: "Kanit" !important;
+  font-weight: normal;
+  background: #fff;
+  color: #15191c !important;
+}
+h2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+p {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  line-height: 25px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5 {
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+/* index */
+#index {
+  background: #fbfbfb;
+  height: 100vh;
+  position: relative;
+}
+
+#index .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#index .box-login {
+  background-color: #ffffff;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 40px 20px;
+  width: 500px;
+  height: auto;
+}
+
+#index .box-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#index .box-logo img {
+  width: 20%;
+}
+
+#index .box-title .title-head {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+#index .box-title .text-name-school {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+#index .box-input .username {
+  font-weight: 400;
+}
+
+#index .box-input .password {
+  font-weight: 400;
+}
+
+#index .box-btn button {
+  background-color: #384381;
+  color: #ffffff;
+  width: 150px;
+  height: 50px;
+  border: 0px;
+}
+
+#index .container #loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+/* #index .btn-filter-date {
+  height: 50px;
+} */
+
+/* dashboard */
+#dashboard {
+  padding-top: 120px;
+  padding-bottom: 40px;
+}
+#dashboard .box-table .title-table {
+  position: relative;
+}
+
+#dashboard .box-table .title-table {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* regiter */
+#regiter {
+  background: #ffffff;
+  height: 100vh;
+  position: relative;
+}
+
+#regiter .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#regiter .box-login {
+  background-color: #ffffff;
+  padding: 40px 20px;
+  width: 500px;
+  height: auto;
+}
+
+#regiter .box-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#regiter .box-logo img {
+  width: 20%;
+}
+
+#regiter .box-title .title-head {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+#regiter .box-title .text-name-school {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+#regiter .box-input .username {
+  font-weight: 400;
+}
+
+#regiter .box-input .password {
+  font-weight: 400;
+}
+
+#regiter .box-btn button {
+  background-color: #384381;
+  color: #ffffff;
+  width: 150px;
+  height: 50px;
+  border: 0px;
+}
+
+#regiter .container #loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+
+#regiter .container #success_tic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+
+/* qrcode */
+#qrcode {
+  padding-top: 120px;
+}
+
+#qrcode .title-qrcode {
+  font-size: 26px;
+}
+
+#qrcode .box-img-qrcode {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  width: 250px;
+  height: 250px;
+}
+
+#qrcode .img-qrcode {
+  width: 230px;
+  height: 230px;
+}
+
+#qrcode .btn-download-qrcode a {
+  background-color: #384381;
+  color: #ffffff;
+  width: 180px;
+  height: 50px;
+  border: 0px;
+}
+
+/* add-user */
+#add-user{
+  padding-top: 120px;
+}
+#add-user .btn-add-user{
+  background-color: #384381;
+  color: #ffffff;
+  width: 180px;
+  height: 50px;
+  border: 0px;
+}
+
+/* footer */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: #384381;
+  width: 100%;
+  text-align: center;
+  height: 40px;
+  color: #ffffff;
+}

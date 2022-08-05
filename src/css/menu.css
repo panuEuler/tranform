@@ -1,0 +1,39 @@
+.navbar-nav {
+  font-size: 15px;
+  font-weight: 300;
+}
+.nav-link {
+  padding: 10px 5px !important;
+}
+.bgTopMenu {
+  background: #0f1d39;
+  width: 100%;
+  height: 104.5px;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  /* opacity: 0.9; */
+}
+.bsnav-mobile .navbar {
+  width: 280px !important;
+}
+.logoScroll {
+  width: 10%;
+}
+
+#logoMenu {
+  width: 50px;
+}
+
+.box-menu {
+  background-color: black;
+}
+
+.bsnav-light {
+  -webkit-box-shadow: 0 4px 6px -6px #222;
+  -moz-box-shadow: 0 4px 6px -6px #222;
+  box-shadow: 0 4px 6px -6px #222;
+}
+button:focus:not(:focus-visible) {
+  outline: none;
+}
