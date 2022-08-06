@@ -1,23 +1,11 @@
 version: '3.3'
 services:
-  db:
-    image: mysql
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_DATABASE: 'library'
-      # So you don't have to use root, but you can if you like
-      MYSQL_USER: 'root'
-      # You can use whatever password you like
-      MYSQL_PASSWORD: '161ebd7d45089b3446ee4e0d86dbcf92'
-      # Password for root access
-      MYSQL_ROOT_PASSWORD: '161ebd7d45089b3446ee4e0d86dbcf92'
-    ports:
-      - "3306:3306"
   web:
     image: web:latest
     build: 
       context: ./
       dockerfile: ./Dockerfile
+    restart: always
     ports:
       - "80:80"
   backend:
@@ -25,12 +13,28 @@ services:
     build: 
       context: ./backend
       dockerfile: ./Dockerfile
+    restart: always
     environment:
       IP: http://localhost:3000
       PORT: 3000
       DATABASE_FRONT: library
       HOST: db
-      USERNAME_FRONT: root
+      USERNAME_FRONT: library
       PASSWORD_FRONT: 161ebd7d45089b3446ee4e0d86dbcf92
     ports:
       - "3000:3000"
+    depends_on: 
+    - db
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: 'library'
+      MYSQL_USER: 'library'
+      MYSQL_PASSWORD: '161ebd7d45089b3446ee4e0d86dbcf92'
+      MYSQL_ROOT_PASSWORD: '161ebd7d45089b3446ee4e0d86dbcf92'
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+       - "./db:/docker-entrypoint-initdb.d"
