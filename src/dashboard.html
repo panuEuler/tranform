@@ -64,8 +64,26 @@
                 <p class="ml-2">ถึง: <input type="text" id="endDate"></p>
                 <button class="btn-primary ml-2 mb-4" onclick="handleDateFilter()">ค้นหา</button>
             </div>
-            <div class="box-chart d-flex justify-content-center" id="box-chart">
-                <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+            <div class="title d-flex justify-content-center">
+                กราฟแสดงจำนวนนักเรียนเข้าใช้งานห้องสมุด
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="box-chart d-flex justify-content-center" id="box-chart">
+                        <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="box-chart d-flex justify-content-center" id="box-chart2">
+                        <canvas id="myChart2" style="width:100%;max-width:600px"></canvas>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="box-chart d-flex justify-content-center" id="box-chart3">
+                        <canvas id="myChart3" style="width:100%;max-width:300px"></canvas>
+                    </div>
+                </div>
             </div>
 
             <div id="text-precent" class="d-flex justify-content-center"></div>
@@ -97,12 +115,13 @@
 
     </div>
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
     <!-- datepicker -->
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         window.onload = async () => {
             let response = await axios({
@@ -157,6 +176,10 @@
             let yValues;
             $('#myChart').remove()
             $('#box-chart').append('<canvas id="myChart" style="width:100%;max-width:600px"></canvas>')
+            $('#myChart2').remove()
+            $('#box-chart2').append('<canvas id="myChart2" style="width:100%;max-width:600px"></canvas>')
+            $('#myChart3').remove()
+            $('#box-chart3').append('<canvas id="myChart3" style="width:100%;max-width:300px"></canvas>')
 
             if (res.data.success) {
                 yValues = await res.data.result.detailY
@@ -165,13 +188,19 @@
                 for (let obj of res.data.result.bodyTable) {
                     trHTML += '<tr>';
                     trHTML += '<td>' + i + '</td>';
-                    trHTML += '<td>' + obj['name'] + '</td>';
+                    trHTML += '<td>' + obj['title'] + ' ' + obj['name'] + '</td>';
                     trHTML += '<td class="text-center">' + obj['class'] + '</td>';
                     trHTML += '<td class="text-center">' + obj['count'] + '</td>';
                     trHTML += "</tr>";
                     i++
                 }
-                document.getElementById('text-precent').innerHTML = '<Label>คิดเป็นร้อยละ ' + res.data.result.percent + '</Label>';
+                document.getElementById('text-precent').innerHTML =
+                    '<Label class="d-flex align-items-center mt-2">' +
+                    'จำนวนนักเรียน' +
+                    '<input id="all_stds" class="form-control ml-2" style="width:60px" value=' + res.data.result.allStd + '>' +
+                    '<button type="button" class="btn btn-success p-1 mr-2" onclick="updateAllStd()">เปลี่ยน</button>' +
+                    ' คิดเป็นร้อยละ ' + ((res.data.result.userRegis / res.data.result.allStd) || 0 * 100).toFixed(2) + '</Label>'
+                    ;
                 document.getElementById("mytable").innerHTML = trHTML;
             }
 
@@ -191,10 +220,70 @@
                     legend: { display: false },
                     title: {
                         display: true,
-                        text: "กราฟแสดงจำนวนนักเรียนเข้าใช้งานห้องสมุด"
                     }
                 }
             });
+            new Chart("myChart2", {
+                type: "line",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        fill: false,
+                        lineTension: 0,
+                        backgroundColor: "rgba(0,0,255,1.0)",
+                        borderColor: "rgba(0,0,255,0.1)",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                    }
+                }
+            });
+            new Chart("myChart3", {
+                type: "pie",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: true },
+                    title: {
+                        display: true,
+                    }
+                }
+            });
+        }
+
+        async function updateAllStd() {
+            const all_stds = document.getElementById("all_stds").value;
+
+            let data = {
+                count: all_stds
+            }
+            console.log(data);
+
+            if (all_stds) {
+                let res = await axios({
+                    method: 'post',
+                    url: `${endpoint()}/api_authen/update_all_student`,
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json',
+                    },
+                    data: data
+                });
+                if (res.data.success) {
+                    Swal.fire('success', 'เปลี่ยนจำนวนนักเรียนสำเร็จ', 'success').then(e => location.reload())
+                }
+            } else {
+                Swal.fire('บันทึกไม่สำเร็จ', '', 'warning')
+            }
         }
 
         datePicker();
@@ -212,6 +301,8 @@
     <!-- menu && jquery -->
     <script src="js/bsnav.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <!-- swal -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
 
 </body>
 

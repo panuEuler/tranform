@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 04, 2022 at 04:46 PM
+-- Generation Time: Aug 05, 2022 at 07:26 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -12,32 +12,14 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT;
+SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS;
+SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION;
+SET NAMES utf8mb4;
 
 --
 -- Database: `library`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `all_student`
---
-
-CREATE TABLE `all_student` (
-  `id` varchar(45) NOT NULL,
-  `count` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `all_student`
---
-
-INSERT INTO `all_student` (`id`, `count`) VALUES
-('1', 366);
 
 -- --------------------------------------------------------
 
@@ -114,12 +96,6 @@ INSERT INTO `user` (`id`, `username`, `password`, `name`, `activeDate`, `status`
 --
 
 --
--- Indexes for table `all_student`
---
-ALTER TABLE `all_student`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `stadent_register`
 --
 ALTER TABLE `stadent_register`
@@ -148,6 +124,9 @@ ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT;
+SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS;
+SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION;
+
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));

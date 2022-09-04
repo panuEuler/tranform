@@ -143,7 +143,8 @@ class authenController {
 			const query = {
 				detailY: [0, 0, 0, 0, 0, 0],
 				bodyTable: [],
-				percent: 0,
+				userRegis: 0,
+				allStd: 0,
 			}
 			const currstart = moment(startDate).format('YYYY-DD-MM')
 			const currend = moment(endDate).format('YYYY-DD-MM')
@@ -177,14 +178,26 @@ class authenController {
 
 			// getBody
 			const q2 = await authenModel.getBodyTable(startDates, endDates)
+			const all_std = await authenModel.getAllStudent()
 			const result2 = JSON.parse(JSON.stringify(q2[0]))
 			if (result2.length > 0) {
 				query.bodyTable = result2
-				query.percent = ((result2.length / 366) * 100).toFixed(2)
+				query.userRegis = result2.length
+				query.allStd = all_std.count 
 			}
 
 			console.log(query);
 			success(res, 'ดึงข้อมูลสำเร็จ', query)
+		} catch (error) {
+			console.log(error)
+			failed(res, 'ดึงข้อมูลไม่สำเร็จ')
+		}
+	}
+
+	async updateAllStudent(req, res) {
+		try {
+			await authenModel.updateAllStudent(req.body)
+			success(res, 'ดึงข้อมูลสำเร็จ')
 		} catch (error) {
 			console.log(error)
 			failed(res, 'ดึงข้อมูลไม่สำเร็จ')

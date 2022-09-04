@@ -54,4 +54,6 @@ route.post(
 
 route.get('/get_dashboard', authenController.getDashboard)
 
+route.post('/update_all_student', authenController.updateAllStudent)
+
 module.exports = route
